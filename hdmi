@@ -1,0 +1,54 @@
+#!/bin/bash
+
+STATE=$1
+OPTION=$2
+
+print_usage() {
+    echo "Usage: hdmi <STATE> [option]"
+    echo ""
+    echo "  State : on/off"
+    echo "  Available options:"
+    echo "      --left-of"
+    echo "      --right-of"
+    echo "      --above"
+    echo "      --below"
+    echo "      --same-as (default)"
+}
+
+check_args() {
+    if [[ $STATE != "on" ]] && [[ $STATE != "off" ]]; then
+        print_usage
+        exit
+    elif [[ $OPTION != "--left-of" ]] && [[ $OPTION != "--right-of" ]] && [[ $OPTION != "--above" ]] && [[ $OPTION != "--below" ]] && [[ $OPTION != "--same-as" ]] && [[ -n $OPTION ]]; then
+        print_usage
+        exit
+    fi
+}
+
+activate() {
+    # The following command assumes that HDMI-1 exists, but depending on the computer,
+    # it might not be true.
+    # TODO : Make the script more generalized (I think that xrandr will mark the screen 
+    # as connected)
+    if [[ -z $OPTION ]]; then
+        xrandr --output HDMI-1 --mode 1920x1080 --same-as eDP-1
+    else
+        xrandr --output HDMI-1 --mode 1920x1080 $OPTION eDP-1
+    fi
+}
+
+deactivate() { 
+    xrandr --output HDMI-1 --off
+}
+
+main() {
+    check_args
+
+    if [[ $STATE == "on" ]]; then
+        activate
+    elif [[ $STATE == "off" ]]; then
+        deactivate
+    fi
+}
+
+main
