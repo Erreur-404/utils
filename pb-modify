@@ -3,6 +3,8 @@
 MODULE=$1
 STATE=$2
 POLYBAR_CONFIG_PATH=~/bin/dotfiles/.config/polybar
+POLYBAR_CONFIG=$POLYBAR_CONFIG_PATH/config.ini
+POLYBAR_LAUNCHER=$POLYBAR_CONFIG_PATH/launch.sh
 
 print_usage() {
     echo "Usage: pb-modify <MODULE> <STATE>"
@@ -23,21 +25,17 @@ check_args() {
 }
 
 adjust_ip() {
-    # TODO : Understand why this doesn't work. It works on the command line, but not 
-    # in the script...
-    # on="label\-connected\ \=\ \\ \%essid\%\ \%local\_ip\%\ \祝\ \%upspeed\%\ \\ \%downspeed\%"
-    # off="label\-connected\ \=\ \\ \%essid\%\ \祝\ \%upspeed\%\ \\ \%downspeed\%"
+    on="label\-connected\ \=\ \\ \%essid\%\ \%local\_ip\%\ \祝\ \%upspeed\%\ \\ \%downspeed\%"
+    off="label\-connected\ \=\ \\ \%essid\%\ \祝\ \%upspeed\%\ \\ \%downspeed\%"
     if [[ $STATE == "on" ]]; then
-        # cat $POLYBAR_CONFIG | sed s/$off/$on/ | tee $POLYBAR_CONFIG
-        cp ~/bin/utils/data/config.ini.ip.on $POLYBAR_CONFIG_PATH/config.ini
+        sed -i s/"$off"/"$on"/ $POLYBAR_CONFIG
     else
-        # cat $POLYBAR_CONFIG | sed s/$on/$off/ | tee $POLYBAR_CONFIG
-        cp ~/bin/utils/data/config.ini.ip.off $POLYBAR_CONFIG_PATH/config.ini
+        sed -i s/"$on"/"$off"/ $POLYBAR_CONFIG
     fi
 }
 
 restart_polybar() {
-    $POLYBAR_CONFIG_PATH/launch.sh > /dev/null
+    $POLYBAR_LAUNCHER > /dev/null
 }
 
 modify() {
