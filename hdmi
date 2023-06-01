@@ -46,6 +46,7 @@ main() {
 
     if [[ $STATE == "on" ]]; then
         activate
+    	sleep 1
     elif [[ $STATE == "off" ]]; then
         deactivate
     fi
