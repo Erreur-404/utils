@@ -47,6 +47,7 @@ main() {
     if [[ $STATE == "on" ]]; then
         activate
     	sleep 1
+	i3-msg restart
     elif [[ $STATE == "off" ]]; then
         deactivate
     fi
