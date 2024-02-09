@@ -1,7 +1,7 @@
 #!/bin/bash
 
 killall spotify
-sleep 3
+sleep 3 
 spotify &
 while
 	playerctl -p spotify play 2>&1
